@@ -13,9 +13,13 @@ import java.io.IOException;
  */
 public class TrainWritable implements WritableComparable<TrainWritable> {
 
-    public IntWritable tag;
     public Text first;
     public Text second;
+
+    public TrainWritable(){
+        first=new Text();
+        second=new Text();
+    }
 
     public TrainWritable(String first,String second){
         this.first=new Text(first);

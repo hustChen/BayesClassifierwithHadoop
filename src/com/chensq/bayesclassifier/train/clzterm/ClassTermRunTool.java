@@ -1,5 +1,6 @@
 package com.chensq.bayesclassifier.train.clzterm;
 
+import com.chensq.bayesclassifier.Main;
 import com.chensq.bayesclassifier.writables.TrainWritable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -20,6 +21,7 @@ public class ClassTermRunTool extends Configured implements Tool {
         Configuration conf=new Configuration();
         Job job=Job.getInstance(conf);
         job.setJobName("class-term-training");
+        job.setJarByClass(Main.class);
 
         job.setInputFormatClass(MyCombineFileInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
@@ -31,8 +33,10 @@ public class ClassTermRunTool extends Configured implements Tool {
         job.setCombinerClass(TrainCTCombiner.class);
         job.setReducerClass(TrainCTReducer.class);
 
-        FileInputFormat.setInputPaths(job,new Path(strings[0]));
-        FileOutputFormat.setOutputPath(job,new Path(strings[1]));
+        for(int i=1;i<strings.length;i++){
+            FileInputFormat.addInputPath(job,new Path(strings[i]));
+        }
+        FileOutputFormat.setOutputPath(job,new Path(strings[0]));
 
         return job.waitForCompletion(true)?0:1;
     }

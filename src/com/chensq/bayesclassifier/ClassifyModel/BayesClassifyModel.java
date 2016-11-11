@@ -1,7 +1,12 @@
 package com.chensq.bayesclassifier.ClassifyModel;
 
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.io.MapWritable;
+
 import java.io.*;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,24 +41,38 @@ public class BayesClassifyModel {
     }
 
     private void initClzModel(String clzPath) throws IOException {
-        InputStream inputStream=new FileInputStream(new File(clzPath));
-        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
+
+        long begin =System.currentTimeMillis();
+
+        FileSystem fs=FileSystem.get(URI.create(clzPath),new Configuration());
+        FSDataInputStream fsDataInputStream=fs.open(new Path(clzPath));
+        BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(fsDataInputStream));
+
+
         String line="";
         while((line=bufferedReader.readLine())!=null){
-            String[] paras=line.split(" ");
+            String[] paras=line.split("\t");
             clzModel.addClass(paras[0],Integer.parseInt(paras[1]));
         }
 
-        System.out.println(clzModel.toString());
+       // System.out.println("clzModel initialzed:\t"+clzModel.toString());
+
+        long end=System.currentTimeMillis();
+        String str=String.format("clzmodel initialized,time spent: %d ms, clzmodel size:%d",end-begin,clzModel.totalCount);
+        System.out.println(str);
 
     }
 
     private void initTermMap(String termPath) throws IOException {
-        InputStream inputStream = new FileInputStream(new File(termPath));
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+        long begin=System.currentTimeMillis();
+
+        FileSystem fs=FileSystem.get(URI.create(termPath),new Configuration());
+        FSDataInputStream fsDataInputStream=fs.open(new Path(termPath));
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fsDataInputStream));
         String line = "";
         while ((line = bufferedReader.readLine()) != null) {
-            String[] paras = line.split(" ");
+            String[] paras = line.trim().split(" ");
             TermModel termModel = term_map.get(paras[0]);
             if (termModel == null) {
                 termModel = new TermModel(paras[0]);
@@ -70,9 +89,13 @@ public class BayesClassifyModel {
             }
         }
 
-        System.out.println("term_map initialized:\t"+term_map.toString());
 
-        System.out.println(clz_term_count.toString());
+        long end=System.currentTimeMillis();
+        String str=String.format("Termmap initialized,time spent: %d ms, term_map size: %d ,clz_term_count_size: %d",end-begin,term_map.size(),clz_term_count.size());
+        System.out.println(str);
+       // System.out.println("term_map initialized:\t"+term_map.toString());
+
+        //System.out.println(clz_term_count.toString());
     }
     /*
     * 实际测试过程，用户调用这个方法测试，传入所有关键字列表和关键字出现次数
@@ -88,7 +111,11 @@ public class BayesClassifyModel {
                 String term=entry.getKey();
                 int appearence=entry.getValue();
 
-                int term_clz_appear=term_map.get(term).classmap.getOrDefault(clz.getKey(),1);
+
+
+                int term_clz_appear=1;
+                if(term_map.get(term)!=null)
+                        term_clz_appear=term_map.get(term).classmap.getOrDefault(clz.getKey(),1);
                 double prob=(double)(term_clz_appear)/clz_term_count.get(clz.getKey());
                 clz_prob+=appearence*Math.log10(prob);
             }
@@ -100,7 +127,6 @@ public class BayesClassifyModel {
 
         String max_clz="";
         double max_prob=Integer.MIN_VALUE;
-
         for(Map.Entry<String,Double> entry:clz_probs.entrySet()){
             if(entry.getValue()>max_prob){
                 max_clz=entry.getKey();
@@ -110,7 +136,7 @@ public class BayesClassifyModel {
 
         System.out.println(clz_probs.toString());
 
-        return max_clz;
+        return max_clz+" "+max_prob;
     }
 
 

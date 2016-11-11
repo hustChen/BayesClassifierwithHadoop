@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by chensq on 16-11-9.
  */
-public class TrainCTReducer extends Reducer<TrainWritable,IntWritable,Text,IntWritable>{
+public class TrainCTReducer extends Reducer<TrainWritable,IntWritable,Text,Text>{
 
     @Override
     protected void reduce(TrainWritable key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
@@ -19,7 +19,7 @@ public class TrainCTReducer extends Reducer<TrainWritable,IntWritable,Text,IntWr
             count+=i.get();
         }
 
-        String output_key=String.format("%s %s",key.first,key.second);
-        context.write(new Text(output_key),new IntWritable(count));
+        String output_key=String.format("%s %s %d",key.second,key.first,count);
+        context.write(new Text(output_key),new Text(""));
     }
 }

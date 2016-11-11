@@ -14,12 +14,12 @@ import java.io.IOException;
 /**
  * Created by chensq on 16-11-9.
  */
-public class MyCDCombineFileInputFormat extends org.apache.hadoop.mapreduce.lib.input.CombineFileInputFormat<LongWritable,Text>{
+public class MyCDCombineFileInputFormat extends org.apache.hadoop.mapreduce.lib.input.CombineFileInputFormat<Text,Text>{
 
     @Override
-    public RecordReader<LongWritable, Text> createRecordReader(InputSplit inputSplit, TaskAttemptContext taskAttemptContext) throws IOException {
+    public RecordReader<Text, Text> createRecordReader(InputSplit inputSplit, TaskAttemptContext taskAttemptContext) throws IOException {
         CombineFileSplit combineFileSplit=(CombineFileSplit)inputSplit;
-        CombineFileRecordReader<LongWritable,Text> recordReader=new CombineFileRecordReader<>(combineFileSplit,taskAttemptContext,MyCombineFileRecordReader.class);
+        CombineFileRecordReader<Text,Text> recordReader=new CombineFileRecordReader<>(combineFileSplit,taskAttemptContext,MyCDCombineFileRecordReader.class);
 
         try {
             recordReader.initialize(combineFileSplit,taskAttemptContext);
