@@ -3,7 +3,15 @@ package com.chensq.bayesclassifier;
 import com.chensq.bayesclassifier.test.TestBayesClassifyToolRunner;
 import com.chensq.bayesclassifier.train.clzdoc.ClassDocRunTool;
 import com.chensq.bayesclassifier.train.clzterm.ClassTermRunTool;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.ToolRunner;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URI;
 
 /**
  * Created by chensq on 16-11-11.
@@ -32,6 +40,8 @@ public class Main {
 
         if(args[0].compareTo(TEST)==0) {
             int test = ToolRunner.run(new TestBayesClassifyToolRunner(), args_1);
+
+
         }
     }
 }
