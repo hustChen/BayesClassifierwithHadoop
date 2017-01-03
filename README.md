@@ -1,5 +1,5 @@
-# BayesClassifierwithHadoop
-组织结构
+# BayesClassifieronHadoop
+##组织结构
 ###com.chensq.bayesclassifier.ClassifyModel 是由训练结果构建的概率统计模型，在测试时直接调用这个模型即可
 ###com.chensq.bayesclassifier.test 是测试模块
 ###com.chensq.bayesclassifier.train.clzdoc 用于统计每个类对应的文档总数
