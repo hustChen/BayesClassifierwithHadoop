@@ -8,12 +8,12 @@
 ###com.chensq.bayesclassifier.Main.java 是程序入口，通过解析入口参数启动相应作业
 ###com.chensq.bayesclassifier.writables 是自定义的writable
 
-hdfs dfs -rm -r /bayes/clzoutput
-hadoop jar /home/chensq/IdeaProjects/BayesClassifier/out/artifacts/BayesClassifier_jar/BayesClassifier.jar trainclz /bayes/clzoutput /bayes/input/train/CHINA /bayes/input/train/UK 
+####hdfs dfs -rm -r /bayes/clzoutput
+####hadoop jar /home/chensq/IdeaProjects/BayesClassifier/out/artifacts/BayesClassifier_jar/BayesClassifier.jar trainclz /bayes/clzoutput /bayes/input/train/CHINA /bayes/input/train/UK 
 
-hdfs dfs -rm -r /bayes/termoutput
-hadoop jar /home/chensq/IdeaProjects/BayesClassifier/out/artifacts/BayesClassifier_jar/BayesClassifier.jar trainterm /bayes/termoutput /bayes/input/train/CHINA /bayes/input/train/UK 
+####hdfs dfs -rm -r /bayes/termoutput
+####hadoop jar /home/chensq/IdeaProjects/BayesClassifier/out/artifacts/BayesClassifier_jar/BayesClassifier.jar trainterm /bayes/termoutput /bayes/input/train/CHINA /bayes/input/train/UK 
 
-hadoop jar /home/chensq/IdeaProjects/BayesClassifier/out/artifacts/BayesClassifier_jar/BayesClassifier.jar test /bayes/testoutput /bayes/input/test/CHINA /bayes/input/test/UK 
+####hadoop jar /home/chensq/IdeaProjects/BayesClassifier/out/artifacts/BayesClassifier_jar/BayesClassifier.jar test /bayes/testoutput /bayes/input/test/CHINA /bayes/input/test/UK 
 
-hdfs dfs -ls /bayes
+####hdfs dfs -ls /bayes
